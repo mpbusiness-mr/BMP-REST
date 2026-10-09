@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BMP REST · Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="lang-ar">
+
+    <!-- Background -->
+    <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+    <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- Loader -->
+    <div class="page-loader" id="pageLoader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+        <span class="loader-text"
+              data-ar="جارٍ التحميل..."
+              data-fr="Chargement..."
+              data-en="Loading...">
+            جارٍ التحميل...
+        </span>
+    </div>
+
+    <div class="page-container">
+
+        <!-- Header -->
+        <header class="page-header">
+
+            <div class="header-brand">
+                <a href="admin.html" class="topbar-logo">
+                    <i class="fas fa-cubes"></i> BMP REST · Admin
+                </a>
+            </div>
+
+            <div class="header-actions">
+
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button type="button" class="lang-btn active" data-lang="ar">عربية</button>
+                    <button type="button" class="lang-btn"        data-lang="fr">Français</button>
+                    <button type="button" class="lang-btn"        data-lang="en">English</button>
+                </div>
+
+                <button id="backButton" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i>
+                    <span data-ar="رجوع" data-fr="Retour" data-en="Back">رجوع</span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- Summary -->
+        <section class="school-summary">
+
+            <div class="summary-item">
+                <span class="summary-label"
+                      data-ar="المسؤول" data-fr="Administrateur" data-en="Administrator">
+                    المسؤول
+                </span>
+                <strong id="adminName">-</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label"
+                      data-ar="عدد المطاعم" data-fr="Restaurants" data-en="Restaurants">
+                    عدد المطاعم
+                </span>
+                <strong id="totalRestaurants">-</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label"
+                      data-ar="المفعّلة" data-fr="Actifs" data-en="Active">
+                    المفعّلة
+                </span>
+                <strong id="activeRestaurants">-</strong>
+            </div>
+
+        </section>
+
+
+        <!-- Dashboard cards -->
+        <main class="dashboard">
+
+            <button id="institutionsButton" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-store"></i></div>
+                <h2 data-ar="المطاعم" data-fr="Restaurants" data-en="Restaurants">المطاعم</h2>
+                <p data-ar="عرض وإدارة جميع المطاعم المسجلة."
+                   data-fr="Voir et gérer tous les restaurants."
+                   data-en="View and manage all registered restaurants.">
+                    عرض وإدارة جميع المطاعم المسجلة.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="createButton" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-plus-circle"></i></div>
+                <h2 data-ar="إضافة مطعم" data-fr="Ajouter un restaurant" data-en="Create Restaurant">إضافة مطعم</h2>
+                <p data-ar="إنشاء حساب مطعم جديد."
+                   data-fr="Créer un nouveau compte restaurant."
+                   data-en="Create a new restaurant account.">
+                    إنشاء حساب مطعم جديد.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="logsButton" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-history"></i></div>
+                <h2 data-ar="سجل العمليات" data-fr="Journal d'activité" data-en="Activity Logs">سجل العمليات</h2>
+                <p data-ar="مراجعة كامل العمليات لكل مطعم."
+                   data-fr="Consulter l'activité de chaque restaurant."
+                   data-en="Review activity for each restaurant.">
+                    مراجعة كامل العمليات لكل مطعم.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="logoutButton" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-sign-out-alt"></i></div>
+                <h2 data-ar="تسجيل الخروج" data-fr="Déconnexion" data-en="Logout">تسجيل الخروج</h2>
+                <p data-ar="إنهاء جلسة المسؤول."
+                   data-fr="Terminer la session administrateur."
+                   data-en="End administrator session.">
+                    إنهاء جلسة المسؤول.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+        </main>
+
+
+        <!-- Institutions Modal -->
+        <div class="modal" id="institutionsModal">
+            <div class="modal-overlay" data-close="institutionsModal"></div>
+            <div class="modal-box modal-lg">
+
+                <header class="modal-header">
+                    <h2 data-ar="المطاعم" data-fr="Restaurants" data-en="Restaurants">المطاعم</h2>
+                    <button class="modal-close" data-close="institutionsModal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </header>
+
+                <div class="modal-body">
+                    <div id="institutionsLoading" class="loading-row">
+                        <div class="loader-spinner small"></div>
+                        <span data-ar="جارٍ التحميل..." data-fr="Chargement..." data-en="Loading...">جارٍ التحميل...</span>
+                    </div>
+
+                    <div class="table-wrap" id="institutionsTableWrap" style="display:none;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-ar="المعرّف" data-fr="ID" data-en="ID">المعرّف</th>
+                                    <th data-ar="الاسم"   data-fr="Nom" data-en="Name">الاسم</th>
+                                    <th data-ar="الهاتف"  data-fr="Téléphone" data-en="Phone">الهاتف</th>
+                                    <th data-ar="الحالة"  data-fr="Statut" data-en="Status">الحالة</th>
+                                    <th data-ar="الرخصة"  data-fr="Licence" data-en="License">الرخصة</th>
+                                    <th data-ar="إجراءات" data-fr="Actions" data-en="Actions">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="institutionsTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="institutionsEmpty" class="empty-state" style="display:none;">
+                        <i class="fas fa-store"></i>
+                        <p data-ar="لا توجد مطاعم بعد."
+                           data-fr="Aucun restaurant pour le moment."
+                           data-en="No restaurants yet.">
+                            لا توجد مطاعم بعد.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Create Institution Modal -->
+        <div class="modal" id="createModal">
+            <div class="modal-overlay" data-close="createModal"></div>
+            <div class="modal-box">
+
+                <header class="modal-header">
+                    <h2 data-ar="إضافة مطعم" data-fr="Ajouter un restaurant" data-en="Create Restaurant">إضافة مطعم</h2>
+                    <button class="modal-close" data-close="createModal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </header>
+
+                <div class="modal-body">
+
+                    <form id="createForm" novalidate>
+
+                        <div class="form-group">
+                            <label for="cName"
+                                   data-ar="اسم المطعم"
+                                   data-fr="Nom du restaurant"
+                                   data-en="Restaurant Name">
+                                اسم المطعم
+                            </label>
+                            <input type="text" id="cName" required>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="cPhone"
+                                       data-ar="الهاتف"
+                                       data-fr="Téléphone"
+                                       data-en="Phone">
+                                    الهاتف
+                                </label>
+                                <input type="tel" id="cPhone">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cEmail"
+                                       data-ar="البريد الإلكتروني"
+                                       data-fr="Email"
+                                       data-en="Email">
+                                    البريد الإلكتروني
+                                </label>
+                                <input type="email" id="cEmail">
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="cLicenseStart"
+                                       data-ar="بداية الرخصة"
+                                       data-fr="Début de licence"
+                                       data-en="License Start">
+                                    بداية الرخصة
+                                </label>
+                                <input type="date" id="cLicenseStart" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cLicenseEnd"
+                                       data-ar="نهاية الرخصة"
+                                       data-fr="Fin de licence"
+                                       data-en="License End">
+                                    نهاية الرخصة
+                                </label>
+                                <input type="date" id="cLicenseEnd" required>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="cUsername"
+                                       data-ar="اسم المستخدم"
+                                       data-fr="Nom d'utilisateur"
+                                       data-en="Username">
+                                    اسم المستخدم
+                                </label>
+                                <input type="text" id="cUsername" required autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cPassword"
+                                       data-ar="كلمة المرور"
+                                       data-fr="Mot de passe"
+                                       data-en="Password">
+                                    كلمة المرور
+                                </label>
+                                <input type="text" id="cPassword" required autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div id="createError" class="error-message"></div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn btn-secondary" data-close="createModal">
+                                <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="createSubmitBtn">
+                                <span class="btn-spinner" aria-hidden="true"></span>
+                                <span class="btn-label"
+                                      data-ar="إنشاء"
+                                      data-fr="Créer"
+                                      data-en="Create">
+                                    إنشاء
+                                </span>
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Activity Logs Modal -->
+        <div class="modal" id="logsModal">
+            <div class="modal-overlay" data-close="logsModal"></div>
+            <div class="modal-box modal-lg">
+
+                <header class="modal-header">
+                    <h2 data-ar="سجل العمليات" data-fr="Journal d'activité" data-en="Activity Logs">سجل العمليات</h2>
+                    <button class="modal-close" data-close="logsModal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </header>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="logInstitution"
+                               data-ar="اختر المطعم"
+                               data-fr="Choisir un restaurant"
+                               data-en="Choose a restaurant">
+                            اختر المطعم
+                        </label>
+                        <select id="logInstitution"></select>
+                    </div>
+
+                    <div id="logsLoading" class="loading-row" style="display:none;">
+                        <div class="loader-spinner small"></div>
+                    </div>
+
+                    <div class="table-wrap" id="logsTableWrap" style="display:none;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-ar="المستخدم" data-fr="Utilisateur" data-en="User">المستخدم</th>
+                                    <th data-ar="الدور"    data-fr="Rôle" data-en="Role">الدور</th>
+                                    <th data-ar="العملية"  data-fr="Action" data-en="Action">العملية</th>
+                                    <th data-ar="التفاصيل" data-fr="Détails" data-en="Details">التفاصيل</th>
+                                    <th data-ar="التاريخ"  data-fr="Date" data-en="Date">التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="logsEmpty" class="empty-state" style="display:none;">
+                        <i class="fas fa-history"></i>
+                        <p data-ar="لا توجد عمليات."
+                           data-fr="Aucune activité."
+                           data-en="No activity yet.">
+                            لا توجد عمليات.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="admin.auth.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
