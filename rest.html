@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BMP REST · Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="rest.css">
+</head>
+
+<body class="lang-ar">
+
+    <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+    <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page-loader" id="pageLoader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+        <span class="loader-text"
+              data-ar="جارٍ التحميل..."
+              data-fr="Chargement..."
+              data-en="Loading...">جارٍ التحميل...</span>
+    </div>
+
+    <div class="page-container">
+
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-brand">
+                <a href="rest.html" class="topbar-logo">
+                    <i class="fas fa-utensils"></i> BMP REST
+                </a>
+            </div>
+
+            <div class="header-actions">
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button type="button" class="lang-btn active" data-lang="ar">عربية</button>
+                    <button type="button" class="lang-btn"        data-lang="fr">Français</button>
+                    <button type="button" class="lang-btn"        data-lang="en">English</button>
+                </div>
+
+                <button id="logoutBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span data-ar="خروج" data-fr="Déconnexion" data-en="Logout">خروج</span>
+                </button>
+            </div>
+        </header>
+
+
+        <!-- Summary -->
+        <section class="school-summary">
+            <div class="summary-item">
+                <span class="summary-label" data-ar="المطعم" data-fr="Restaurant" data-en="Restaurant">المطعم</span>
+                <strong id="restaurantName">-</strong>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label" data-ar="رقم المؤسسة" data-fr="ID" data-en="Institution ID">رقم المؤسسة</span>
+                <strong id="restaurantId">-</strong>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label" data-ar="الحالة" data-fr="Statut" data-en="Status">الحالة</span>
+                <strong id="restaurantStatus">-</strong>
+            </div>
+        </section>
+
+
+        <!-- Live tiles -->
+        <section class="tiles">
+            <div class="tile">
+                <div class="tile-icon"><i class="fas fa-receipt"></i></div>
+                <div class="tile-value" id="tileTodayOrders">-</div>
+                <div class="tile-label"
+                     data-ar="طلبات اليوم" data-fr="Commandes aujourd'hui" data-en="Today's Orders">طلبات اليوم</div>
+            </div>
+            <div class="tile">
+                <div class="tile-icon"><i class="fas fa-coins"></i></div>
+                <div class="tile-value" id="tileTodayIncome">-</div>
+                <div class="tile-label"
+                     data-ar="دخل اليوم" data-fr="Revenu aujourd'hui" data-en="Today's Income">دخل اليوم</div>
+            </div>
+            <div class="tile">
+                <div class="tile-icon"><i class="fas fa-calendar"></i></div>
+                <div class="tile-value" id="tileMonthOrders">-</div>
+                <div class="tile-label"
+                     data-ar="طلبات الشهر" data-fr="Commandes du mois" data-en="Month Orders">طلبات الشهر</div>
+            </div>
+            <div class="tile">
+                <div class="tile-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="tile-value" id="tileMonthIncome">-</div>
+                <div class="tile-label"
+                     data-ar="دخل الشهر" data-fr="Revenu du mois" data-en="Month Income">دخل الشهر</div>
+            </div>
+            <div class="tile">
+                <div class="tile-icon"><i class="fas fa-user-clock"></i></div>
+                <div class="tile-value" id="tileOutstanding">-</div>
+                <div class="tile-label"
+                     data-ar="ديون معلقة" data-fr="Dettes en attente" data-en="Outstanding Debts">ديون معلقة</div>
+            </div>
+        </section>
+
+
+        <!-- Cards -->
+        <main class="dashboard">
+            <button id="ordersCard" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-receipt"></i></div>
+                <h2 data-ar="الطلبات" data-fr="Commandes" data-en="Orders">الطلبات</h2>
+                <p data-ar="تسجيل وعرض طلبات المطعم."
+                   data-fr="Enregistrer et consulter les commandes."
+                   data-en="Record and view restaurant orders.">
+                    تسجيل وعرض طلبات المطعم.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="debtsCard" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+                <h2 data-ar="الديون" data-fr="Dettes" data-en="Debts">الديون</h2>
+                <p data-ar="تتبع الزبائن الذين عليهم ديون."
+                   data-fr="Suivre les clients débiteurs."
+                   data-en="Track customers with outstanding debts.">
+                    تتبع الزبائن الذين عليهم ديون.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="reportsCard" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+                <h2 data-ar="التقارير" data-fr="Rapports" data-en="Reports">التقارير</h2>
+                <p data-ar="عرض إحصائيات المبيعات والأرباح."
+                   data-fr="Voir les statistiques de vente."
+                   data-en="View sales statistics and reports.">
+                    عرض إحصائيات المبيعات والأرباح.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+
+            <button id="settingsCard" class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-cog"></i></div>
+                <h2 data-ar="الإعدادات" data-fr="Paramètres" data-en="Settings">الإعدادات</h2>
+                <p data-ar="إدارة إعدادات المطعم والمستخدمين."
+                   data-fr="Gérer les paramètres et utilisateurs."
+                   data-en="Manage restaurant settings and users.">
+                    إدارة إعدادات المطعم والمستخدمين.
+                </p>
+                <span class="card-arrow"><i class="fas fa-arrow-left"></i></span>
+            </button>
+        </main>
+
+    </div>
+
+
+    <!-- ==================================================== -->
+    <!-- ORDERS MODAL -->
+    <!-- ==================================================== -->
+
+    <div class="modal" id="ordersModal">
+        <div class="modal-overlay" data-close="ordersModal"></div>
+        <div class="modal-box modal-xl">
+
+            <header class="modal-header">
+                <h2 data-ar="الطلبات" data-fr="Commandes" data-en="Orders">الطلبات</h2>
+                <button class="modal-close" data-close="ordersModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+
+                <div class="toolbar">
+                    <button class="btn btn-primary" id="addOrderBtn">
+                        <i class="fas fa-plus"></i>
+                        <span data-ar="طلب جديد" data-fr="Nouvelle commande" data-en="New Order">طلب جديد</span>
+                    </button>
+
+                    <input type="search" id="ordersSearch"
+                           data-ar-placeholder="بحث..."
+                           data-fr-placeholder="Rechercher..."
+                           data-en-placeholder="Search..."
+                           placeholder="بحث...">
+
+                    <select id="ordersMonthFilter"></select>
+
+                    <select id="ordersMethodFilter"></select>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="رقم الطلب" data-fr="N°" data-en="Order #">رقم الطلب</th>
+                                <th data-ar="الزبون" data-fr="Client" data-en="Customer">الزبون</th>
+                                <th data-ar="الهاتف" data-fr="Téléphone" data-en="Phone">الهاتف</th>
+                                <th data-ar="المبلغ" data-fr="Montant" data-en="Amount">المبلغ</th>
+                                <th data-ar="طريقة الدفع" data-fr="Paiement" data-en="Method">طريقة الدفع</th>
+                                <th data-ar="سجّلها" data-fr="Enregistré par" data-en="Recorded By">سجّلها</th>
+                                <th data-ar="التاريخ" data-fr="Date" data-en="Date">التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state" id="ordersEmpty" style="display:none;">
+                    <i class="fas fa-receipt"></i>
+                    <p data-ar="لا توجد طلبات." data-fr="Aucune commande." data-en="No orders yet.">لا توجد طلبات.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ADD ORDER MODAL -->
+    <div class="modal" id="addOrderModal">
+        <div class="modal-overlay" data-close="addOrderModal"></div>
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2 data-ar="طلب جديد" data-fr="Nouvelle commande" data-en="New Order">طلب جديد</h2>
+                <button class="modal-close" data-close="addOrderModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+                <form id="addOrderForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="orderCustomerName"
+                               data-ar="اسم الزبون (اختياري)"
+                               data-fr="Nom du client (optionnel)"
+                               data-en="Customer Name (optional)">اسم الزبون (اختياري)</label>
+                        <input type="text" id="orderCustomerName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderCustomerPhone"
+                               data-ar="هاتف الزبون (اختياري)"
+                               data-fr="Téléphone (optionnel)"
+                               data-en="Customer Phone (optional)">هاتف الزبون (اختياري)</label>
+                        <input type="tel" id="orderCustomerPhone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderSubtotal"
+                               data-ar="المبلغ"
+                               data-fr="Montant"
+                               data-en="Amount">المبلغ</label>
+                        <input type="number" id="orderSubtotal" min="1" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderPaymentMethod"
+                               data-ar="طريقة الدفع"
+                               data-fr="Mode de paiement"
+                               data-en="Payment Method">طريقة الدفع</label>
+                        <select id="orderPaymentMethod" required>
+                            <option value="Cash">Cash</option>
+                            <option value="Bankily">Bankily</option>
+                            <option value="Sedad">Sedad</option>
+                            <option value="Masrivi">Masrivi</option>
+                            <option value="Bimbank">Bimbank</option>
+                            <option value="Gimtel">Gimtel</option>
+                        </select>
+                    </div>
+
+                    <div id="orderFormError" class="error-message"></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-close="addOrderModal">
+                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveOrderBtn">
+                            <span class="btn-spinner"></span>
+                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================================================== -->
+    <!-- DEBTS MODAL -->
+    <!-- ==================================================== -->
+
+    <div class="modal" id="debtsModal">
+        <div class="modal-overlay" data-close="debtsModal"></div>
+        <div class="modal-box modal-xl">
+
+            <header class="modal-header">
+                <h2 data-ar="الديون" data-fr="Dettes" data-en="Debts">الديون</h2>
+                <button class="modal-close" data-close="debtsModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+
+                <div class="toolbar">
+                    <button class="btn btn-primary" id="addDebtBtn">
+                        <i class="fas fa-plus"></i>
+                        <span data-ar="دين جديد" data-fr="Nouvelle dette" data-en="New Debt">دين جديد</span>
+                    </button>
+
+                    <input type="search" id="debtsSearch"
+                           data-ar-placeholder="بحث بالاسم أو الهاتف..."
+                           data-fr-placeholder="Rechercher par nom ou tél..."
+                           data-en-placeholder="Search by name or phone..."
+                           placeholder="بحث بالاسم أو الهاتف...">
+
+                    <select id="debtsStatusFilter">
+                        <option value="" data-ar="الكل" data-fr="Tout" data-en="All">الكل</option>
+                        <option value="unpaid"  data-ar="غير مدفوع" data-fr="Impayé" data-en="Unpaid">غير مدفوع</option>
+                        <option value="partial" data-ar="جزئي" data-fr="Partiel" data-en="Partial">جزئي</option>
+                        <option value="settled" data-ar="مسدّد" data-fr="Réglé" data-en="Settled">مسدّد</option>
+                    </select>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="الزبون" data-fr="Client" data-en="Customer">الزبون</th>
+                                <th data-ar="الهاتف" data-fr="Téléphone" data-en="Phone">الهاتف</th>
+                                <th data-ar="المتبقي" data-fr="Restant" data-en="Owed">المتبقي</th>
+                                <th data-ar="المدفوع" data-fr="Payé" data-en="Paid">المدفوع</th>
+                                <th data-ar="الإجمالي" data-fr="Total" data-en="Total">الإجمالي</th>
+                                <th data-ar="الحالة" data-fr="Statut" data-en="Status">الحالة</th>
+                                <th data-ar="إجراءات" data-fr="Actions" data-en="Actions">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debtsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state" id="debtsEmpty" style="display:none;">
+                    <i class="fas fa-hand-holding-dollar"></i>
+                    <p data-ar="لا توجد ديون." data-fr="Aucune dette." data-en="No debts yet.">لا توجد ديون.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ADD DEBT MODAL -->
+    <div class="modal" id="addDebtModal">
+        <div class="modal-overlay" data-close="addDebtModal"></div>
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2 data-ar="دين جديد" data-fr="Nouvelle dette" data-en="New Debt">دين جديد</h2>
+                <button class="modal-close" data-close="addDebtModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+                <form id="addDebtForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="debtCustomerName"
+                               data-ar="اسم الزبون" data-fr="Nom du client" data-en="Customer Name">اسم الزبون</label>
+                        <input type="text" id="debtCustomerName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtCustomerPhone"
+                               data-ar="هاتف الزبون (8 أرقام)"
+                               data-fr="Téléphone (8 chiffres)"
+                               data-en="Phone (8 digits)">هاتف الزبون (8 أرقام)</label>
+                        <input type="tel" id="debtCustomerPhone" maxlength="8" pattern="\d{8}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtAmountOwed"
+                               data-ar="المبلغ المتبقي"
+                               data-fr="Montant dû"
+                               data-en="Amount Owed">المبلغ المتبقي</label>
+                        <input type="number" id="debtAmountOwed" min="0.01" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtAmountPaid"
+                               data-ar="المبلغ المدفوع (اختياري)"
+                               data-fr="Montant payé (optionnel)"
+                               data-en="Amount Paid (optional)">المبلغ المدفوع (اختياري)</label>
+                        <input type="number" id="debtAmountPaid" min="0" step="0.01" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtNotes"
+                               data-ar="ملاحظات" data-fr="Notes" data-en="Notes">ملاحظات</label>
+                        <input type="text" id="debtNotes">
+                    </div>
+
+                    <div id="debtFormError" class="error-message"></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-close="addDebtModal">
+                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveDebtBtn">
+                            <span class="btn-spinner"></span>
+                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ADD DEBT PAYMENT MODAL -->
+    <div class="modal" id="addPaymentModal">
+        <div class="modal-overlay" data-close="addPaymentModal"></div>
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2 data-ar="إضافة دفعة" data-fr="Ajouter un paiement" data-en="Add Payment">إضافة دفعة</h2>
+                <button class="modal-close" data-close="addPaymentModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+
+                <p class="muted-line">
+                    <span data-ar="المتبقي حالياً:" data-fr="Restant actuel:" data-en="Current owed:">المتبقي حالياً:</span>
+                    <strong id="paymentOwedNow">-</strong>
+                </p>
+
+                <form id="addPaymentForm" novalidate>
+                    <div class="form-group">
+                        <label for="paymentAmount"
+                               data-ar="المبلغ المدفوع"
+                               data-fr="Montant payé"
+                               data-en="Payment Amount">المبلغ المدفوع</label>
+                        <input type="number" id="paymentAmount" min="0.01" step="0.01" required>
+                    </div>
+
+                    <div id="paymentFormError" class="error-message"></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-close="addPaymentModal">
+                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="savePaymentBtn">
+                            <span class="btn-spinner"></span>
+                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================================================== -->
+    <!-- REPORTS MODAL -->
+    <!-- ==================================================== -->
+
+    <div class="modal" id="reportsModal">
+        <div class="modal-overlay" data-close="reportsModal"></div>
+        <div class="modal-box modal-xl">
+
+            <header class="modal-header">
+                <h2 data-ar="التقارير" data-fr="Rapports" data-en="Reports">التقارير</h2>
+                <button class="modal-close" data-close="reportsModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+
+                <div class="toolbar">
+                    <select id="reportMonthFilter"></select>
+                    <select id="reportMethodFilter"></select>
+                    <button class="btn btn-secondary" id="printReportBtn">
+                        <i class="fas fa-print"></i>
+                        <span data-ar="طباعة" data-fr="Imprimer" data-en="Print">طباعة</span>
+                    </button>
+                </div>
+
+                <div class="tiles mini">
+                    <div class="tile">
+                        <div class="tile-value" id="reportTotalOrders">-</div>
+                        <div class="tile-label" data-ar="إجمالي الطلبات" data-fr="Commandes" data-en="Total Orders">إجمالي الطلبات</div>
+                    </div>
+                    <div class="tile">
+                        <div class="tile-value" id="reportTotalIncome">-</div>
+                        <div class="tile-label" data-ar="إجمالي الدخل" data-fr="Revenu" data-en="Total Income">إجمالي الدخل</div>
+                    </div>
+                    <div class="tile">
+                        <div class="tile-value" id="reportAvgTicket">-</div>
+                        <div class="tile-label" data-ar="متوسط الفاتورة" data-fr="Ticket moyen" data-en="Avg Ticket">متوسط الفاتورة</div>
+                    </div>
+                    <div class="tile">
+                        <div class="tile-value" id="reportTopMethod">-</div>
+                        <div class="tile-label" data-ar="الأكثر استخداماً" data-fr="Top méthode" data-en="Top Method">الأكثر استخداماً</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title" data-ar="حسب طريقة الدفع" data-fr="Par méthode" data-en="By Payment Method">حسب طريقة الدفع</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="الطريقة" data-fr="Méthode" data-en="Method">الطريقة</th>
+                                <th data-ar="الطلبات" data-fr="Commandes" data-en="Orders">الطلبات</th>
+                                <th data-ar="الإجمالي" data-fr="Total" data-en="Total">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportMethodBody"></tbody>
+                    </table>
+                </div>
+
+                <h3 class="section-title" data-ar="حسب الشهر" data-fr="Par mois" data-en="By Month">حسب الشهر</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="الشهر" data-fr="Mois" data-en="Month">الشهر</th>
+                                <th data-ar="الطلبات" data-fr="Commandes" data-en="Orders">الطلبات</th>
+                                <th data-ar="الإجمالي" data-fr="Total" data-en="Total">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportMonthBody"></tbody>
+                    </table>
+                </div>
+
+                <h3 class="section-title" data-ar="حسب اليوم" data-fr="Par jour" data-en="By Day">حسب اليوم</h3>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="اليوم" data-fr="Jour" data-en="Day">اليوم</th>
+                                <th data-ar="الطلبات" data-fr="Commandes" data-en="Orders">الطلبات</th>
+                                <th data-ar="الإجمالي" data-fr="Total" data-en="Total">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportDayBody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="rest.auth.js"></script>
+    <script src="rest.js"></script>
+
+</body>
+
+</html>
