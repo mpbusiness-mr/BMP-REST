@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BMP REST · Settings</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="rest.settings.css">
+</head>
+
+<body class="lang-ar">
+
+    <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+    <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <div class="page-loader" id="pageLoader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+        <span class="loader-text"
+              data-ar="جارٍ التحميل..."
+              data-fr="Chargement..."
+              data-en="Loading...">جارٍ التحميل...</span>
+    </div>
+
+    <div class="page-container">
+
+        <header class="page-header">
+
+            <div class="header-brand">
+                <a href="rest.html" class="topbar-logo">
+                    <i class="fas fa-utensils"></i> BMP REST
+                </a>
+            </div>
+
+            <div class="header-actions">
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button type="button" class="lang-btn active" data-lang="ar">عربية</button>
+                    <button type="button" class="lang-btn"        data-lang="fr">Français</button>
+                    <button type="button" class="lang-btn"        data-lang="en">English</button>
+                </div>
+
+                <button id="backBtn" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i>
+                    <span data-ar="رجوع" data-fr="Retour" data-en="Back">رجوع</span>
+                </button>
+            </div>
+
+        </header>
+
+        <h1 class="page-title">
+            <i class="fas fa-cog"></i>
+            <span data-ar="الإعدادات" data-fr="Paramètres" data-en="Settings">الإعدادات</span>
+        </h1>
+
+
+        <!-- ============================================= -->
+        <!-- SECTION 1 — RESTAURANT INFO -->
+        <!-- ============================================= -->
+
+        <section class="settings-card">
+
+            <header class="settings-card-header">
+                <h2>
+                    <i class="fas fa-store"></i>
+                    <span data-ar="معلومات المطعم" data-fr="Informations du restaurant" data-en="Restaurant Info">معلومات المطعم</span>
+                </h2>
+            </header>
+
+            <div class="settings-card-body">
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="rName" data-ar="اسم المطعم" data-fr="Nom" data-en="Name">اسم المطعم</label>
+                        <input type="text" id="rName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rPhone" data-ar="الهاتف" data-fr="Téléphone" data-en="Phone">الهاتف</label>
+                        <input type="tel" id="rPhone">
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="rEmail" data-ar="البريد الإلكتروني" data-fr="Email" data-en="Email">البريد الإلكتروني</label>
+                        <input type="email" id="rEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rCurrency" data-ar="العملة" data-fr="Devise" data-en="Currency">العملة</label>
+                        <select id="rCurrency">
+                            <option value="MRU">MRU</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="infoError" class="error-message"></div>
+
+                <div class="settings-actions">
+                    <button type="button" id="saveInfoBtn" class="btn btn-primary">
+                        <span class="btn-spinner"></span>
+                        <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- SECTION 2 — CHANGE OWN PASSWORD -->
+        <!-- ============================================= -->
+
+        <section class="settings-card">
+
+            <header class="settings-card-header">
+                <h2>
+                    <i class="fas fa-lock"></i>
+                    <span data-ar="تغيير كلمة المرور" data-fr="Changer le mot de passe" data-en="Change Password">تغيير كلمة المرور</span>
+                </h2>
+            </header>
+
+            <div class="settings-card-body">
+
+                <div class="form-group">
+                    <label for="curPass" data-ar="كلمة المرور الحالية" data-fr="Mot de passe actuel" data-en="Current Password">كلمة المرور الحالية</label>
+                    <input type="password" id="curPass">
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="newPass" data-ar="كلمة المرور الجديدة" data-fr="Nouveau mot de passe" data-en="New Password">كلمة المرور الجديدة</label>
+                        <input type="password" id="newPass">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPass" data-ar="تأكيد كلمة المرور" data-fr="Confirmer" data-en="Confirm Password">تأكيد كلمة المرور</label>
+                        <input type="password" id="confirmPass">
+                    </div>
+
+                </div>
+
+                <div id="passError" class="error-message"></div>
+
+                <div class="settings-actions">
+                    <button type="button" id="savePassBtn" class="btn btn-primary">
+                        <span class="btn-spinner"></span>
+                        <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- SECTION 3 — USERS (Director only) -->
+        <!-- ============================================= -->
+
+        <section class="settings-card" id="usersSection" style="display:none;">
+
+            <header class="settings-card-header">
+                <h2>
+                    <i class="fas fa-users"></i>
+                    <span data-ar="المستخدمون" data-fr="Utilisateurs" data-en="Users">المستخدمون</span>
+                </h2>
+            </header>
+
+            <div class="settings-card-body">
+
+                <div class="settings-actions">
+                    <button type="button" id="addUserBtn" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        <span data-ar="إضافة مستخدم" data-fr="Ajouter un utilisateur" data-en="Add User">إضافة مستخدم</span>
+                    </button>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-ar="اسم المستخدم" data-fr="Nom d'utilisateur" data-en="Username">اسم المستخدم</th>
+                                <th data-ar="الدور" data-fr="Rôle" data-en="Role">الدور</th>
+                                <th data-ar="الحالة" data-fr="Statut" data-en="Status">الحالة</th>
+                                <th data-ar="إجراءات" data-fr="Actions" data-en="Actions">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state" id="usersEmpty" style="display:none;">
+                    <i class="fas fa-users"></i>
+                    <p data-ar="لا يوجد مستخدمون." data-fr="Aucun utilisateur." data-en="No users yet.">لا يوجد مستخدمون.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ADD USER MODAL -->
+    <div class="modal" id="addUserModal">
+        <div class="modal-overlay" data-close="addUserModal"></div>
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2 data-ar="إضافة مستخدم" data-fr="Ajouter un utilisateur" data-en="Add User">إضافة مستخدم</h2>
+                <button class="modal-close" data-close="addUserModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+                <form id="addUserForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="nuUsername" data-ar="اسم المستخدم" data-fr="Nom d'utilisateur" data-en="Username">اسم المستخدم</label>
+                        <input type="text" id="nuUsername" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nuPassword" data-ar="كلمة المرور" data-fr="Mot de passe" data-en="Password">كلمة المرور</label>
+                        <input type="text" id="nuPassword" required autocomplete="off">
+                    </div>
+
+                    <div id="addUserError" class="error-message"></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-close="addUserModal">
+                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveUserBtn">
+                            <span class="btn-spinner"></span>
+                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CHANGE USER PASSWORD MODAL -->
+    <div class="modal" id="changeUserPassModal">
+        <div class="modal-overlay" data-close="changeUserPassModal"></div>
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2 data-ar="تغيير كلمة مرور المستخدم" data-fr="Changer le mot de passe" data-en="Change User Password">تغيير كلمة مرور المستخدم</h2>
+                <button class="modal-close" data-close="changeUserPassModal"><i class="fas fa-times"></i></button>
+            </header>
+
+            <div class="modal-body">
+                <form id="changeUserPassForm" novalidate>
+
+                    <p class="muted-line">
+                        <span data-ar="المستخدم:" data-fr="Utilisateur:" data-en="User:">المستخدم:</span>
+                        <strong id="cpTargetUser">-</strong>
+                    </p>
+
+                    <div class="form-group">
+                        <label for="cpNewPass" data-ar="كلمة المرور الجديدة" data-fr="Nouveau mot de passe" data-en="New Password">كلمة المرور الجديدة</label>
+                        <input type="text" id="cpNewPass" required>
+                    </div>
+
+                    <div id="changeUserPassError" class="error-message"></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-close="changeUserPassModal">
+                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveUserPassBtn">
+                            <span class="btn-spinner"></span>
+                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="rest.auth.js"></script>
+    <script src="rest.settings.js"></script>
+
+</body>
+
+</html>
