@@ -891,10 +891,25 @@ langButtons.forEach(function (btn) {
 // =====================================================
 
 applyLanguage(currentLang);
-loadSummary();
 
-requestAnimationFrame(function () {
-    setTimeout(function () {
-        if (pageLoader) pageLoader.classList.add("hidden");
-    }, 250);
-});
+// Hide loader only after the first data call resolves (success or failure)
+async function bootstrap() {
+
+    try {
+        await loadSummary();
+    } catch (e) {
+        console.error("Bootstrap error:", e);
+    } finally {
+        hideLoader();
+    }
+
+}
+
+function hideLoader() {
+    if (!pageLoader) return;
+    requestAnimationFrame(function () {
+        pageLoader.classList.add("hidden");
+    });
+}
+
+bootstrap();
