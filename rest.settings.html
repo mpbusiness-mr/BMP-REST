@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BMP REST · Settings</title>
+    <title>BMP · Settings</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
 
             <div class="header-brand">
                 <a href="rest.html" class="topbar-logo">
-                    <i class="fas fa-utensils"></i> BMP REST
+                    <i class="fas fa-cubes"></i> BMP
                 </a>
             </div>
 
@@ -247,46 +247,6 @@
                             <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
                         </button>
                         <button type="submit" class="btn btn-primary" id="saveUserBtn">
-                            <span class="btn-spinner"></span>
-                            <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- CHANGE USER PASSWORD MODAL -->
-    <div class="modal" id="changeUserPassModal">
-        <div class="modal-overlay" data-close="changeUserPassModal"></div>
-        <div class="modal-box">
-            <header class="modal-header">
-                <h2 data-ar="تغيير كلمة مرور المستخدم" data-fr="Changer le mot de passe" data-en="Change User Password">تغيير كلمة مرور المستخدم</h2>
-                <button class="modal-close" data-close="changeUserPassModal"><i class="fas fa-times"></i></button>
-            </header>
-
-            <div class="modal-body">
-                <form id="changeUserPassForm" novalidate>
-
-                    <p class="muted-line">
-                        <span data-ar="المستخدم:" data-fr="Utilisateur:" data-en="User:">المستخدم:</span>
-                        <strong id="cpTargetUser">-</strong>
-                    </p>
-
-                    <div class="form-group">
-                        <label for="cpNewPass" data-ar="كلمة المرور الجديدة" data-fr="Nouveau mot de passe" data-en="New Password">كلمة المرور الجديدة</label>
-                        <input type="text" id="cpNewPass" required>
-                    </div>
-
-                    <div id="changeUserPassError" class="error-message"></div>
-
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" data-close="changeUserPassModal">
-                            <span data-ar="إلغاء" data-fr="Annuler" data-en="Cancel">إلغاء</span>
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="saveUserPassBtn">
                             <span class="btn-spinner"></span>
                             <span class="btn-label" data-ar="حفظ" data-fr="Enregistrer" data-en="Save">حفظ</span>
                         </button>
