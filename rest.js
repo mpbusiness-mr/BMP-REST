@@ -139,9 +139,11 @@ function fmtTime(v) {
            String(d.getMinutes()).padStart(2, "0");
 }
 
+const CURRENCY_LABEL = "MRU";
+
 function fmtMoney(v) {
     const n = Number(v || 0);
-    return n.toFixed(2);
+    return n.toFixed(2) + " " + CURRENCY_LABEL;
 }
 
 function monthKey(dateStr) {
