@@ -566,13 +566,33 @@ applyLanguage(currentLang);
 
 if (IS_DIRECTOR) {
     $("usersSection").style.display = "block";
-    loadUsers();
 }
 
-loadSettings();
+async function bootstrap() {
 
-requestAnimationFrame(function () {
-    setTimeout(function () {
-        if (pageLoader) pageLoader.classList.add("hidden");
-    }, 250);
-});
+    try {
+
+        const tasks = [ loadSettings() ];
+
+        if (IS_DIRECTOR) {
+            tasks.push(loadUsers());
+        }
+
+        await Promise.all(tasks);
+
+    } catch (e) {
+        console.error("Bootstrap error:", e);
+    } finally {
+        hideLoader();
+    }
+
+}
+
+function hideLoader() {
+    if (!pageLoader) return;
+    requestAnimationFrame(function () {
+        pageLoader.classList.add("hidden");
+    });
+}
+
+bootstrap();
