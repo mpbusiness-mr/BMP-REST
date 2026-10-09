@@ -644,4 +644,15 @@ html[dir="rtl"] .card-arrow i { transform: rotate(180deg); }
 
     .summary-item { padding: 18px; }
 
-    .dashboard-card { min-height: 160px; padding: 24px 20px 20
+    .dashboard-card { min-height: 160px; padding: 24px 20px 20px; }
+
+    .dashboard-card h2 { font-size: 1.1rem; }
+
+    .lang-btn { padding: 6px 10px; font-size: 0.72rem; }
+
+    .topbar-logo { font-size: 1.2rem; }
+
+    .form-row { grid-template-columns: 1fr; }
+
+    .modal-box { max-height: 92vh; }
+}
