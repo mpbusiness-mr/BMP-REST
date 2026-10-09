@@ -1,0 +1,160 @@
+/* =====================================================
+   BMP REST · Dashboard additions
+   ===================================================== */
+
+/* Live tiles */
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.tiles.mini { grid-template-columns: repeat(4, 1fr); margin-bottom: 24px; }
+
+.tile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    box-shadow: var(--shadow-card);
+    text-align: start;
+    position: relative;
+    overflow: hidden;
+}
+
+.tile::before {
+    content: "";
+    position: absolute;
+    top: 0; inset-inline-start: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--primary));
+}
+
+.tile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #0f2b4b, #1a3f66);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 16px rgba(15, 43, 75, 0.20);
+}
+
+.tile-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.tile-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.toolbar input,
+.toolbar select {
+    padding: 10px 14px;
+    border: 1px solid rgba(15, 43, 75, 0.14);
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    outline: none;
+    transition: var(--transition);
+    min-width: 150px;
+    flex: 1;
+}
+
+.toolbar input:focus,
+.toolbar select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15);
+}
+
+/* Modal XL */
+.modal-box.modal-xl { max-width: 1100px; }
+
+/* Section title */
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 20px 0 10px;
+}
+
+/* Muted line */
+.muted-line {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    background: #f6fafd;
+    border-radius: var(--radius-sm);
+}
+
+.muted-line strong { color: var(--primary); }
+
+/* Debt status pills */
+.status-unpaid  { background: #fee2e2; color: #b91c1c; }
+.status-partial { background: #fef3c7; color: #92400e; }
+.status-settled { background: #dcfce7; color: #166534; }
+
+/* Print */
+@media print {
+    .bg-blob, .bg-grid, .page-header, .school-summary, .tiles,
+    .dashboard, .toolbar, .modal-header, .modal-close,
+    .modal-actions, .row-actions { display: none !important; }
+
+    .modal, .modal-box {
+        position: static !important;
+        display: block !important;
+        max-width: none !important;
+        box-shadow: none !important;
+    }
+
+    .modal-overlay { display: none !important; }
+
+    body, .page-container { background: #fff !important; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .tiles { grid-template-columns: repeat(3, 1fr); }
+    .tiles.mini { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+    .tiles { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .tiles.mini { grid-template-columns: 1fr; }
+
+    .tile-value { font-size: 1.15rem; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar input,
+    .toolbar select { width: 100%; }
+    .modal-box.modal-xl { max-width: 100%; }
+}
