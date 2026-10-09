@@ -26,7 +26,7 @@ const IS_DIRECTOR = isRestaurantDirector();
 // =====================================================
 
 let currentLang = localStorage.getItem(LANG_KEY) || "ar";
-let changePassTargetUser = null;
+let usersCache = [];
 
 
 // =====================================================
@@ -37,65 +37,65 @@ const T = {
 
     ar: {
         save:           "حفظ",
-        saving:         "جارٍ الحفظ...",
         error:          "حدث خطأ.",
         savedInfo:      "تم حفظ المعلومات.",
         savedPass:      "تم تغيير كلمة المرور.",
         savedUser:      "تم إنشاء المستخدم.",
-        savedUserPass:  "تم تغيير كلمة المرور.",
         enabledUser:    "تم تفعيل المستخدم.",
+        disabledUser:   "تم تعطيل المستخدم.",
         director:       "مدير",
         user:           "مستخدم",
         active:         "نشط",
         disabled:       "معطّل",
         enable:         "تفعيل",
-        changePass:     "تغيير كلمة المرور",
+        disable:        "تعطيل",
         passMismatch:   "كلمتا المرور غير متطابقتين.",
         passShort:      "كلمة المرور قصيرة جداً.",
         fieldsRequired: "يرجى تعبئة جميع الحقول المطلوبة.",
-        confirmEnable:  "هل تريد تفعيل هذا المستخدم؟"
+        confirmEnable:  "هل تريد تفعيل هذا المستخدم؟",
+        confirmDisable: "هل تريد تعطيل هذا المستخدم؟"
     },
 
     fr: {
         save:           "Enregistrer",
-        saving:         "Enregistrement...",
         error:          "Une erreur est survenue.",
         savedInfo:      "Informations enregistrées.",
         savedPass:      "Mot de passe modifié.",
         savedUser:      "Utilisateur créé.",
-        savedUserPass:  "Mot de passe modifié.",
         enabledUser:    "Utilisateur activé.",
+        disabledUser:   "Utilisateur désactivé.",
         director:       "Directeur",
         user:           "Utilisateur",
         active:         "Actif",
         disabled:       "Désactivé",
         enable:         "Activer",
-        changePass:     "Changer le mot de passe",
+        disable:        "Désactiver",
         passMismatch:   "Les mots de passe ne correspondent pas.",
         passShort:      "Mot de passe trop court.",
         fieldsRequired: "Veuillez remplir tous les champs requis.",
-        confirmEnable:  "Activer cet utilisateur ?"
+        confirmEnable:  "Activer cet utilisateur ?",
+        confirmDisable: "Désactiver cet utilisateur ?"
     },
 
     en: {
         save:           "Save",
-        saving:         "Saving...",
         error:          "An error occurred.",
         savedInfo:      "Information saved.",
         savedPass:      "Password changed.",
         savedUser:      "User created.",
-        savedUserPass:  "Password changed.",
         enabledUser:    "User enabled.",
+        disabledUser:   "User disabled.",
         director:       "Director",
         user:           "User",
         active:         "Active",
         disabled:       "Disabled",
         enable:         "Enable",
-        changePass:     "Change Password",
+        disable:        "Disable",
         passMismatch:   "Passwords do not match.",
         passShort:      "Password is too short.",
         fieldsRequired: "Please fill all required fields.",
-        confirmEnable:  "Enable this user?"
+        confirmEnable:  "Enable this user?",
+        confirmDisable: "Disable this user?"
     }
 
 };
@@ -195,7 +195,6 @@ async function loadSettings() {
         $("rEmail").value    = s.email || "";
         $("rCurrency").value = s.currency || "MRU";
 
-        // Read-only if not Director
         if (!IS_DIRECTOR) {
             $("rName").disabled     = true;
             $("rPhone").disabled    = true;
@@ -325,8 +324,6 @@ $("savePassBtn").addEventListener("click", async function () {
 // SECTION 3 — Users (Director only)
 // =====================================================
 
-let usersCache = [];
-
 async function loadUsers() {
 
     if (!IS_DIRECTOR) return;
@@ -379,23 +376,26 @@ function renderUsers() {
             "<td>" + escapeHtml(roleText) + "</td>" +
             '<td><span class="status-pill ' + statusCls + '">' + escapeHtml(statusText) + "</span></td>" +
             '<td><div class="row-actions">' +
-                '<button class="row-btn" data-change-pass="' + escapeHtml(u.username) + '">' +
-                    '<i class="fas fa-key"></i> ' + T[currentLang].changePass +
-                "</button>" +
-                (!isDirector && statusKey !== "active"
-                    ? '<button class="row-btn" data-enable="' + escapeHtml(u.username) + '">' +
-                        '<i class="fas fa-check"></i> ' + T[currentLang].enable +
-                      "</button>"
-                    : "") +
+                (isDirector
+                    ? '<span style="color:var(--text-muted);font-size:0.8rem;">—</span>'
+                    : (statusKey === "active"
+                        ? '<button class="row-btn danger" data-disable="' + escapeHtml(u.username) + '">' +
+                            '<i class="fas fa-ban"></i> ' + T[currentLang].disable +
+                          "</button>"
+                        : '<button class="row-btn" data-enable="' + escapeHtml(u.username) + '">' +
+                            '<i class="fas fa-check"></i> ' + T[currentLang].enable +
+                          "</button>"
+                      )
+                ) +
             "</div></td>";
 
         tbody.appendChild(row);
 
     });
 
-    document.querySelectorAll("[data-change-pass]").forEach(function (b) {
+    document.querySelectorAll("[data-disable]").forEach(function (b) {
         b.addEventListener("click", function () {
-            openChangePassModal(b.dataset.changePass);
+            disableUser(b.dataset.disable);
         });
     });
 
@@ -463,65 +463,6 @@ $("addUserForm").addEventListener("submit", async function (e) {
 });
 
 
-// Change user password
-function openChangePassModal(username) {
-
-    changePassTargetUser = username;
-
-    $("cpTargetUser").textContent = username;
-    $("cpNewPass").value = "";
-    $("changeUserPassError").textContent = "";
-
-    openModal("changeUserPassModal");
-
-}
-
-$("changeUserPassForm").addEventListener("submit", async function (e) {
-
-    e.preventDefault();
-
-    const err = $("changeUserPassError");
-    err.textContent = "";
-
-    const newPassword = $("cpNewPass").value;
-
-    if (!newPassword || newPassword.length < 4) {
-        err.textContent = T[currentLang].passShort;
-        return;
-    }
-
-    const btn = $("saveUserPassBtn");
-    btn.disabled = true;
-    btn.classList.add("loading");
-
-    try {
-
-        const result = await api("restChangeUserPassword", {
-            targetUsername: changePassTargetUser,
-            newPassword:    newPassword
-        });
-
-        if (!result.success) {
-            throw new Error(result.message || T[currentLang].error);
-        }
-
-        closeModal("changeUserPassModal");
-        alert(T[currentLang].savedUserPass);
-
-    } catch (error) {
-
-        err.textContent = error.message || T[currentLang].error;
-
-    } finally {
-
-        btn.disabled = false;
-        btn.classList.remove("loading");
-
-    }
-
-});
-
-
 // Enable user
 async function enableUser(username) {
 
@@ -539,6 +480,33 @@ async function enableUser(username) {
 
         await loadUsers();
         alert(T[currentLang].enabledUser);
+
+    } catch (error) {
+
+        alert(error.message || T[currentLang].error);
+
+    }
+
+}
+
+
+// Disable user
+async function disableUser(username) {
+
+    if (!window.confirm(T[currentLang].confirmDisable)) return;
+
+    try {
+
+        const result = await api("restDisableUser", {
+            targetUsername: username
+        });
+
+        if (!result.success) {
+            throw new Error(result.message || T[currentLang].error);
+        }
+
+        await loadUsers();
+        alert(T[currentLang].disabledUser);
 
     } catch (error) {
 
