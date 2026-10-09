@@ -33,6 +33,13 @@ let currentLang = localStorage.getItem(LANG_KEY) || "ar";
 
 
 // =====================================================
+// Currency label
+// =====================================================
+
+const CURRENCY_LABEL = "MRU";
+
+
+// =====================================================
 // Translations
 // =====================================================
 
@@ -50,10 +57,6 @@ const T = {
         cancel: "إلغاء",
         error: "حدث خطأ.",
         saving: "جارٍ الحفظ...",
-        orderSaved: "تم حفظ الطلب.",
-        debtSaved: "تم حفظ الدين.",
-        paymentSaved: "تم تسجيل الدفعة.",
-        deleted: "تم الحذف.",
         phoneError: "رقم الهاتف يجب أن يكون 8 أرقام."
     },
 
@@ -69,10 +72,6 @@ const T = {
         cancel: "Annuler",
         error: "Une erreur est survenue.",
         saving: "Enregistrement...",
-        orderSaved: "Commande enregistrée.",
-        debtSaved: "Dette enregistrée.",
-        paymentSaved: "Paiement enregistré.",
-        deleted: "Supprimé.",
         phoneError: "Le téléphone doit contenir 8 chiffres."
     },
 
@@ -88,10 +87,6 @@ const T = {
         cancel: "Cancel",
         error: "An error occurred.",
         saving: "Saving...",
-        orderSaved: "Order saved.",
-        debtSaved: "Debt saved.",
-        paymentSaved: "Payment recorded.",
-        deleted: "Deleted.",
         phoneError: "Phone must be 8 digits."
     }
 
@@ -138,8 +133,6 @@ function fmtTime(v) {
     return String(d.getHours()).padStart(2, "0") + ":" +
            String(d.getMinutes()).padStart(2, "0");
 }
-
-const CURRENCY_LABEL = "MRU";
 
 function fmtMoney(v) {
     const n = Number(v || 0);
@@ -315,9 +308,9 @@ function populateOrderFilters() {
 
 function renderOrders() {
 
-    const search   = String($("ordersSearch").value || "").toLowerCase().trim();
-    const month    = $("ordersMonthFilter").value;
-    const method   = $("ordersMethodFilter").value;
+    const search = String($("ordersSearch").value || "").toLowerCase().trim();
+    const month  = $("ordersMonthFilter").value;
+    const method = $("ordersMethodFilter").value;
 
     const tbody = $("ordersTableBody");
     const empty = $("ordersEmpty");
@@ -334,7 +327,8 @@ function renderOrders() {
             const s =
                 String(o.orderNumber   || "").toLowerCase() + " " +
                 String(o.customerName  || "").toLowerCase() + " " +
-                String(o.customerPhone || "").toLowerCase();
+                String(o.customerPhone || "").toLowerCase() + " " +
+                String(o.itemName      || "").toLowerCase();
             if (s.indexOf(search) === -1) return false;
         }
 
@@ -358,6 +352,7 @@ function renderOrders() {
             "<td>" + escapeHtml(o.orderNumber || "-") + "</td>" +
             "<td>" + escapeHtml(o.customerName || "-") + "</td>" +
             "<td>" + escapeHtml(o.customerPhone || "-") + "</td>" +
+            "<td>" + escapeHtml(o.itemName || "-") + "</td>" +
             "<td>" + fmtMoney(o.subtotal) + "</td>" +
             "<td>" + escapeHtml(o.paymentMethod || "-") + "</td>" +
             "<td>" + escapeHtml(o.recordedBy || "-") + "</td>" +
@@ -433,7 +428,7 @@ function renderDebts() {
             "<td>" + fmtMoney(d.amountOwed) + "</td>" +
             "<td>" + fmtMoney(d.amountPaid) + "</td>" +
             "<td>" + fmtMoney(d.totalAmount) + "</td>" +
-            '<td><span class="status-pill ' + statusCls + '">' + statusText(statusTxt) + "</span></td>" +
+            '<td><span class="status-pill ' + statusCls + '">' + escapeHtml(statusTxt) + "</span></td>" +
             '<td><div class="row-actions">' +
                 '<button class="row-btn" data-pay-id="' + escapeHtml(d.debtId) + '">' +
                     '<i class="fas fa-money-bill"></i> ' + T[currentLang].pay +
@@ -474,8 +469,6 @@ function renderDebts() {
 
 }
 
-function statusText(s) { return escapeHtml(s); }
-
 
 // =====================================================
 // Orders modal handlers
@@ -505,6 +498,7 @@ $("addOrderForm").addEventListener("submit", async function (e) {
 
     const customerName  = $("orderCustomerName").value.trim();
     const customerPhone = $("orderCustomerPhone").value.trim();
+    const itemName      = $("orderItemName").value.trim();
     const subtotal      = Number($("orderSubtotal").value);
     const paymentMethod = $("orderPaymentMethod").value;
 
@@ -522,6 +516,7 @@ $("addOrderForm").addEventListener("submit", async function (e) {
         const result = await api("restAddOrder", {
             customerName:  customerName,
             customerPhone: customerPhone,
+            itemName:      itemName,
             subtotal:      subtotal,
             paymentMethod: paymentMethod
         });
@@ -796,7 +791,6 @@ $("reportsCard").addEventListener("click", async function () {
 
     openModal("reportsModal");
 
-    // Build month + method filters
     const monthSel = $("reportMonthFilter");
     const methodSel = $("reportMethodFilter");
 
@@ -882,7 +876,6 @@ langButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
         applyLanguage(btn.dataset.lang);
 
-        // Refresh dynamic bits that depend on language
         $("restaurantStatus").textContent =
             T[currentLang][statusFromLicense()] || "active";
 
