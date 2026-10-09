@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BMP REST · Dashboard</title>
+    <title>BMP · Dashboard</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
         <header class="page-header">
             <div class="header-brand">
                 <a href="rest.html" class="topbar-logo">
-                    <i class="fas fa-utensils"></i> BMP REST
+                    <i class="fas fa-cubes"></i> BMP
                 </a>
             </div>
 
@@ -196,6 +196,7 @@
                                 <th data-ar="رقم الطلب" data-fr="N°" data-en="Order #">رقم الطلب</th>
                                 <th data-ar="الزبون" data-fr="Client" data-en="Customer">الزبون</th>
                                 <th data-ar="الهاتف" data-fr="Téléphone" data-en="Phone">الهاتف</th>
+                                <th data-ar="العنصر" data-fr="Article" data-en="Item">العنصر</th>
                                 <th data-ar="المبلغ" data-fr="Montant" data-en="Amount">المبلغ</th>
                                 <th data-ar="طريقة الدفع" data-fr="Paiement" data-en="Method">طريقة الدفع</th>
                                 <th data-ar="سجّلها" data-fr="Enregistré par" data-en="Recorded By">سجّلها</th>
@@ -243,6 +244,14 @@
                                data-fr="Téléphone (optionnel)"
                                data-en="Customer Phone (optional)">هاتف الزبون (اختياري)</label>
                         <input type="tel" id="orderCustomerPhone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderItemName"
+                               data-ar="اسم العنصر (اختياري)"
+                               data-fr="Article (optionnel)"
+                               data-en="Item Name (optional)">اسم العنصر (اختياري)</label>
+                        <input type="text" id="orderItemName">
                     </div>
 
                     <div class="form-group">
