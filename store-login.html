@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BMP · المتاجر — قريباً</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #0f2b4b;
+            --primary-light: #1a3f66;
+            --accent: #00b4d8;
+            --accent-soft: #e6f7fd;
+            --text-dark: #0b1a2a;
+            --text-muted: #3e5a76;
+            --white: #ffffff;
+
+            --glass-bg: rgba(255, 255, 255, 0.62);
+            --glass-border: rgba(255, 255, 255, 0.75);
+
+            --shadow-card: 0 20px 50px rgba(15, 43, 75, 0.10), 0 4px 12px rgba(15, 43, 75, 0.04);
+
+            --radius: 22px;
+            --transition: all 0.25s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #f4faff 0%, #e8f3fb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body.lang-ar { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+        body.lang-fr, body.lang-en { font-family: 'Inter', sans-serif; }
+
+        /* Background decor */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-blob-1 {
+            width: 520px; height: 520px;
+            top: -180px; inset-inline-start: -160px;
+            background: radial-gradient(circle at 30% 30%, #00b4d8, #0077b6 60%, transparent 75%);
+            animation: drift1 18s ease-in-out infinite;
+        }
+
+        .bg-blob-2 {
+            width: 480px; height: 480px;
+            bottom: -180px; inset-inline-end: -140px;
+            background: radial-gradient(circle at 70% 70%, #1a3f66, #0f2b4b 60%, transparent 75%);
+            animation: drift2 22s ease-in-out infinite;
+        }
+
+        @keyframes drift1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(40px, 30px) scale(1.06); }
+        }
+        @keyframes drift2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(-40px, -30px) scale(1.05); }
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(15, 43, 75, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 43, 75, 0.035) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+        }
+
+        /* Card */
+        .soon-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 520px;
+            padding: 52px 40px 42px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .soon-card::before {
+            content: "";
+            position: absolute;
+            top: 0; inset-inline-start: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, #16a34a, var(--primary));
+            opacity: 0.9;
+        }
+
+        .brand-mark {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #0f2b4b, #1a3f66);
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 14px 30px rgba(15, 43, 75, 0.22);
+            animation: pulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1);    box-shadow: 0 14px 30px rgba(15, 43, 75, 0.22); }
+            50%      { transform: scale(1.05); box-shadow: 0 18px 40px rgba(15, 43, 75, 0.30); }
+        }
+
+        .soon-card h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .soon-card h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #16a34a;
+            margin-bottom: 22px;
+        }
+
+        .soon-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 28px;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #1a3f66, #0f2b4b);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 12px 26px rgba(15, 43, 75, 0.25);
+            font-family: inherit;
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(15, 43, 75, 0.30);
+        }
+
+        .cta i { font-size: 1rem; }
+
+        .cta.whatsapp { background: linear-gradient(145deg, #25d366, #1ea950); }
+        .cta.whatsapp:hover { box-shadow: 0 16px 32px rgba(37, 211, 102, 0.35); }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .back-link:hover { color: var(--accent); }
+
+        .back-link i { margin-inline-end: 6px; }
+
+        /* Language switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            inset-inline-end: 20px;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(140%);
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            box-shadow: 0 8px 24px rgba(15, 43, 75, 0.06);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 7px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            letter-spacing: 0.3px;
+        }
+
+        .lang-btn:hover { color: var(--primary); }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 6px 14px rgba(15, 43, 75, 0.25);
+        }
+
+        @media (max-width: 560px) {
+            .soon-card { padding: 42px 26px 32px; }
+            .soon-card h1 { font-size: 1.6rem; }
+            .brand-mark { width: 62px; height: 62px; font-size: 1.7rem; }
+            .lang-switcher {
+                top: 14px;
+                inset-inline-end: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body class="lang-ar">
+
+    <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+    <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- Language switcher -->
+    <div class="lang-switcher" role="group" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="ar">عربية</button>
+        <button type="button" class="lang-btn"        data-lang="fr">Français</button>
+        <button type="button" class="lang-btn"        data-lang="en">English</button>
+    </div>
+
+    <main class="soon-card">
+
+        <div class="brand-mark">
+            <i class="fas fa-store"></i>
+        </div>
+
+        <h1 data-ar="BMP · المتاجر الكبرى"
+            data-fr="BMP · Grandes surfaces"
+            data-en="BMP · Supermarkets">
+            BMP · المتاجر الكبرى
+        </h1>
+
+        <h2 data-ar="قريباً"
+            data-fr="Bientôt disponible"
+            data-en="Coming soon">
+            قريباً
+        </h2>
+
+        <p data-ar="نعمل حالياً على إطلاق وحدة المتاجر الكبرى والسوبرماركت. ستتمكن قريباً من إدارة المخزون، المبيعات، المدفوعات، والتقارير من مكان واحد."
+           data-fr="Nous préparons actuellement le module pour les grandes surfaces et supermarchés. Vous pourrez bientôt gérer stock, ventes, paiements et rapports en un seul endroit."
+           data-en="We're currently working on the supermarket module. Soon you'll be able to manage inventory, sales, payments, and reports from one place.">
+            نعمل حالياً على إطلاق وحدة المتاجر الكبرى والسوبرماركت. ستتمكن قريباً من إدارة المخزون، المبيعات، المدفوعات، والتقارير من مكان واحد.
+        </p>
+
+        <a href="https://wa.me/22244362949" target="_blank" rel="noopener" class="cta whatsapp">
+            <i class="fab fa-whatsapp"></i>
+            <span data-ar="تواصل معنا للاستفسار"
+                  data-fr="Nous contacter pour plus d'infos"
+                  data-en="Contact us for more info">
+                تواصل معنا للاستفسار
+            </span>
+        </a>
+
+        <br>
+
+        <a href="https://mpbusiness-mr.github.io/BMP/" class="back-link">
+            <i class="fas fa-arrow-right"></i>
+            <span data-ar="العودة إلى الصفحة الرئيسية"
+                  data-fr="Retour à l'accueil"
+                  data-en="Back to home">
+                العودة إلى الصفحة الرئيسية
+            </span>
+        </a>
+
+    </main>
+
+    <script>
+        (function () {
+            'use strict';
+
+            const DEFAULT_LANG = 'ar';
+            const STORAGE_KEY  = 'bmp_lang';
+            const SUPPORTED    = ['ar', 'fr', 'en'];
+
+            function setLanguage(lang) {
+                if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
+
+                const html = document.documentElement;
+                html.lang = lang;
+                html.dir  = (lang === 'ar') ? 'rtl' : 'ltr';
+
+                document.body.classList.remove('lang-ar', 'lang-fr', 'lang-en');
+                document.body.classList.add('lang-' + lang);
+
+                document.querySelectorAll('[data-ar]').forEach(function (el) {
+                    const value = el.dataset[lang];
+                    if (value !== undefined) el.textContent = value;
+                });
+
+                document.querySelectorAll('.lang-btn').forEach(function (btn) {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+
+                localStorage.setItem(STORAGE_KEY, lang);
+            }
+
+            document.querySelectorAll('.lang-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    setLanguage(btn.dataset.lang);
+                });
+            });
+
+            const saved = localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+            setLanguage(saved);
+        })();
+    </script>
+
+</body>
+
+</html>
